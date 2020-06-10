@@ -19,8 +19,8 @@ spec:
         image: docker.io/amazon/aws-alb-ingress-controller:v1.1.6
         args:
         - --ingress-class=alb
-        - --cluster-name=fabulous-unicorn-1586946464
-        - --aws-vpc-id=vpc-05fe34f36d2a936d5
+        - --cluster-name=fargate-cluster
+        - --aws-vpc-id=vpc-0f3b8877fbce61d42
         - --aws-region=eu-west-1
       serviceAccountName: alb-ingress-controller
 

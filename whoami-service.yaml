@@ -3,11 +3,11 @@ kind: Service
 metadata:
   annotations:
     alb.ingress.kubernetes.io/target-type: ip
-  name: nginx-service
+  name: whoami-service
   namespace: default
 spec:
   selector:
-    app: nginx
+    app: whoami
   type: NodePort
   ports:
   - port: 80

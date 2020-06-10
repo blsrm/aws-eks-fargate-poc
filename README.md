@@ -1,13 +1,13 @@
 # Fargate PoC
 
 ```sh
-eksctl create cluster -f cluster-fargate.yaml --profile wdm
+eksctl create cluster -f cluster-fargate.yaml --profile saml
 ```
 
-Noe enable OIDC for pod roles
+Now enable OIDC for pod roles
 
 ```sh
-eksctl utils associate-iam-oidc-provider --cluster $CLUSTER_NAME --approve --profile wdm --region eu-west-1
+eksctl utils associate-iam-oidc-provider --cluster fargate-cluster --approve --profile saml --region eu-west-1
 ```
 
 Now check IAM (providers). And check this for pod roles:
@@ -16,7 +16,7 @@ https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-servi
 Get and apply the IAM policy for balancers
 
 ```sh
-aws iam create-policy --policy-name ALBIngressControllerIAMPolicy --policy-document file://alb-ingress-iam-policy.json --profile wdm
+aws iam create-policy --policy-name ALBIngressControllerIAMPolicy --policy-document file://alb-ingress-iam-policy.json --profile saml --region eu-west-1
 ```
 
 Now apply K8S roles and bindings
@@ -32,10 +32,12 @@ role in place])
 eksctl create iamserviceaccount \
 --name alb-ingress-controller \
 --namespace kube-system \
---cluster $CLUSTER_NAME \
---attach-policy-arn arn:aws:iam::$AWS_ACCOUNT_ID:policy/ALBIngressControllerIAMPolicy \
---approve --region eu-west-1 --profile wdm
+--cluster fargate-cluster \
+--attach-policy-arn arn:aws:iam::459181319149:policy/ALBIngressControllerIAMPolicy \
+--approve --region eu-west-1 --profile saml
 ```
+
+`N.B. 459181319149 is the AWS Account Id`
 
 Check also service accounts (there is the alb-ingress-controller service
 account)
